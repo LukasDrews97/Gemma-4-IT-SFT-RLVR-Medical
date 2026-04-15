@@ -1,0 +1,86 @@
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "llm_finetuning"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    # Machine Learning
+    "torch==2.9.0+cu128", # CUDA-enabled PyTorch
+    "transformers==5.5.4",
+    
+    # Datasets
+    "datasets==4.8.4",
+    "accelerate==1.13.0",
+    "evaluate===0.4.6",
+    "bitsandbytes==0.49.2",
+    "trl==0.29.1",
+    "peft==0.18.1",
+    "protobuf==7.34.1",
+    "sentencepiece==0.2.1",
+    
+    # Data Processing and Manipulation
+    "numpy==2.3.4",
+    "pandas==2.3.3",
+    
+    # Data Visualization
+    "matplotlib==3.10.7",
+    "seaborn==0.13.2",
+    
+    # Prototyping
+    "notebook==7.4.7",
+    
+    # Miscellaneous
+    "requests==2.32.5", # Simple and elegant HTTP library
+    "setuptools==80.9.0",
+    "tqdm==4.67.1",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[dependency-groups]
+dev = [
+    # Formatter
+    "black==25.1.0",                        # General formatting
+
+    # Debugging
+    "debugpy==1.8.16",                      # Official VS code debugging package
+
+    # Testing
+    "pytest==8.4.2",
+    "hypothesis==6.138.14",
+
+    # Type Checker
+    "pyright==1.1.405",
+
+    # Linter
+    "flake8==7.3.0",
+    "flake8-bugbear==24.12.12",             # A must-have for serious projects
+    "flake8-comprehensions==3.16.0",        # Suggets simplifications for list/set/dict comprehensions
+    "flake8-builtins==2.5.0",               # Prevents shadowing of python builtins
+    "pep8-naming==0.15.1",                  # Enforces Python naming conventions
+    "flake8-docstrings==1.7.0",
+    "darglint==1.8.1",                      # Validates that docstrings match actual function signatures
+    "flake8-class-attributes-order==0.3.0", # Enforces order in class definitions
+    "flake8-executable==2.1.3",             # Flags Python files marked executable but lacking a proper shebang line.
+    "flake8-eradicate==1.5.0",              # Detects left-over code
+    "flake8-annotations==3.1.1",            # Enforces function/method parameter and return annotations
+    "flake8-cognitive-complexity==0.1.0",   # Checks how hard code is to understand
+    "flake8-length==0.3.1",                 # Max line length
+    "flake8-max-function-length==0.9.0",    # Max function length, ignoring comments and empty lines
+    "flake8-isort==6.1.2",                  # Checks import order configured in .isort.cfg
+    "wemake-python-styleguide==1.3.0",      # Very strict linting rules 
+]
