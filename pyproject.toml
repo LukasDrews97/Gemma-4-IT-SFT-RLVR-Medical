@@ -32,7 +32,6 @@ dependencies = [
     
     # Miscellaneous
     "setuptools==80.9.0",
-    "protobuf==7.34.1",
     "tqdm==4.67.1",
 ]
 

@@ -12,15 +12,20 @@ def get_dataset(n_train_samples="all", n_test_samples="all"):
 
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
 
-    # maps sample to output
+    # map sample to output
     def preprocess_med(sample):
         context_text = " ".join(sample["context"]["contexts"])
 
-        # 1. Define the conversation structure
+        # Define the conversation structure
         messages = [
             {
                 "role": "user",
-                "content": f"Context: {context_text}\n\nQuestion: {sample['question']}\n\nAnswer the question with reasoning. End your response with 'Final Decision: [yes/no/maybe]'.",
+                "content": (
+                    f"Context: {context_text}\n\n"
+                    f"Question: {sample['question']}\n\n"
+                    "Answer the question with reasoning. "
+                    "End your response with 'Final Decision: [yes/no/maybe]'."
+                ),
             },
             {
                 "role": "assistant",
@@ -28,15 +33,15 @@ def get_dataset(n_train_samples="all", n_test_samples="all"):
             },
         ]
 
-        # 2. Apply the template
-        # For SFT/Training, we want the FULL conversation as one string
         full_prompt = tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=False
+            messages,
+            tokenize=False,
+            add_generation_prompt=False
         )
 
         return {
-            "text": full_prompt,  # For SFT
-            "messages": messages,  # Keeps the raw list for eval flexibility
+            "text": full_prompt,              # Used by SFTTrainer
+            "messages": messages,             # Used for evaluation
             "ground_truth": sample["final_decision"],
         }
 
