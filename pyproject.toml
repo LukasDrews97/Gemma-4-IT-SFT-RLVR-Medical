@@ -9,16 +9,15 @@ dependencies = [
     # Machine Learning
     "torch==2.9.0+cu128", # CUDA-enabled PyTorch
     "transformers==5.5.4",
+    "evaluate===0.4.6",
+    "accelerate==1.13.0",
+    "bitsandbytes==0.49.2",
+    "trl==1.2.0",
+    "peft==0.18.1",
+    "sentencepiece==0.2.1",
     
     # Datasets
     "datasets==4.8.4",
-    "accelerate==1.13.0",
-    "evaluate===0.4.6",
-    "bitsandbytes==0.49.2",
-    "trl==0.29.1",
-    "peft==0.18.1",
-    "protobuf==7.34.1",
-    "sentencepiece==0.2.1",
     
     # Data Processing and Manipulation
     "numpy==2.3.4",
@@ -32,8 +31,8 @@ dependencies = [
     "notebook==7.4.7",
     
     # Miscellaneous
-    "requests==2.32.5", # Simple and elegant HTTP library
     "setuptools==80.9.0",
+    "protobuf==7.34.1",
     "tqdm==4.67.1",
 ]
 
@@ -83,4 +82,6 @@ dev = [
     "flake8-max-function-length==0.9.0",    # Max function length, ignoring comments and empty lines
     "flake8-isort==6.1.2",                  # Checks import order configured in .isort.cfg
     "wemake-python-styleguide==1.3.0",      # Very strict linting rules 
+    "flake8-pep585==0.1.7",                 # Enforces the use of build in types (e.g. list) over class hints from typing
+    "flake8-new-union-types==0.4.1",        # Enforces the use of the new Union and Optional syntax
 ]

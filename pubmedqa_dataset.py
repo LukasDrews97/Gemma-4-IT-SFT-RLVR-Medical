@@ -1,31 +1,61 @@
+import os
+
 from datasets import load_dataset
+from transformers import AutoTokenizer
+
+from config import TOKENIZER_ID
 
 
-def get_dataset():
+def get_dataset(n_train_samples="all", n_test_samples="all"):
     train_data = load_dataset("pubmed_qa", "pqa_artificial", split="train")
-    # Use the expert-labeled set for testing
     test_data = load_dataset("pubmed_qa", "pqa_labeled", split="train")
 
-    # 2. THE FORMATTING FUNCTION
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
+
+    # maps sample to output
     def preprocess_med(sample):
-        # Flatten the context list into a paragraph
         context_text = " ".join(sample["context"]["contexts"])
 
-        # We create a prompt that asks for reasoning first, then the decision
-        # This structure is PERFECT for RLVR later.
-        user_msg = f"Context: {context_text}\n\nQuestion: {sample['question']}\n\nAnswer the question with reasoning."
+        # 1. Define the conversation structure
+        messages = [
+            {
+                "role": "user",
+                "content": f"Context: {context_text}\n\nQuestion: {sample['question']}\n\nAnswer the question with reasoning. End your response with 'Final Decision: [yes/no/maybe]'.",
+            },
+            {
+                "role": "assistant",
+                "content": f"{sample['long_answer']}\nFinal Decision: {sample['final_decision']}",
+            },
+        ]
+
+        # 2. Apply the template
+        # For SFT/Training, we want the FULL conversation as one string
+        full_prompt = tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=False
+        )
 
         return {
-            "messages": [
-                {"role": "user", "content": user_msg},
-                {"role": "assistant", "content": f"{sample['long_answer']}\nFinal Decision: {sample['final_decision']}"}
-            ],
-            "ground_truth": sample["final_decision"] # Store this for RLVR rewards later
+            "text": full_prompt,  # For SFT
+            "messages": messages,  # Keeps the raw list for eval flexibility
+            "ground_truth": sample["final_decision"],
         }
 
-    # 3. APPLY FORMATTING
-    # Select a manageable amount for your 5070 Ti (e.g., 15k-20k)
-    train_dataset = train_data.shuffle(seed=42).select(range(40)).map(preprocess_med, remove_columns=train_data.column_names)
-    test_dataset = test_data.map(preprocess_med, remove_columns=test_data.column_names)
+    train_dataset = train_data.shuffle(seed=123)
+    test_dataset = test_data
+
+    if n_train_samples != "all":
+        n_train_samples = min(n_train_samples, len(train_dataset))
+        train_dataset = train_dataset.select(range(n_train_samples))
+
+    if n_test_samples != "all":
+        n_test_samples = min(n_test_samples, len(test_dataset))
+        test_dataset = test_dataset.select(range(n_test_samples))
+
+    train_dataset = train_dataset.map(
+        preprocess_med, remove_columns=train_data.column_names, num_proc=os.cpu_count()
+    )
+    test_dataset = test_dataset.map(
+        preprocess_med, remove_columns=test_data.column_names, num_proc=os.cpu_count()
+    )
 
     return train_dataset, test_dataset

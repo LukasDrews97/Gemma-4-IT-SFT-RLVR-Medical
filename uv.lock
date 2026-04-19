@@ -811,6 +811,28 @@ wheels = [
 ]
 
 [[package]]
+name = "flake8-new-union-types"
+version = "0.4.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "attrs" },
+    { name = "flake8" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0b/f0/b07ec2ded79aec3f95e676d5fbffc5c7e7ce6fe7640cd69d2ce109daca41/flake8-new-union-types-0.4.1.tar.gz", hash = "sha256:0a9dd421099f2525f8be525977ff6632b13b68719a7b0807cf49028d4287b0aa", size = 4368, upload-time = "2022-05-30T09:34:23.564Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c3/2f/487aeffaab826bb3d23b51c20059c5b9519bca456748652f536df274ac6f/flake8_new_union_types-0.4.1-py3-none-any.whl", hash = "sha256:92737a2f598772d5aedd05b5450c5dd200e0f1acd42b3c1f95dbbe3211af2009", size = 4624, upload-time = "2022-05-30T09:34:21.432Z" },
+]
+
+[[package]]
+name = "flake8-pep585"
+version = "0.1.7"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/d4/95ea172225cfacf81a329e3c8af7f91807409cf70fadf32f09992d779a1b/flake8-pep585-0.1.7.tar.gz", hash = "sha256:363f9413aa12849ee9bfdc437c4e79cc4e0fb3af4abbb61cfed79860e349e0e0", size = 9705, upload-time = "2023-02-26T12:01:59.689Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d3/b6/ca9fb285698996160ff778db1115bebb4b46d4722d883a664646f027566b/flake8_pep585-0.1.7-py3-none-any.whl", hash = "sha256:d5c7a5858382d6ca8c56554bd8bed090e12c378b98f6d7c6502abed9a40a658e", size = 10842, upload-time = "2023-02-26T12:02:01.464Z" },
+]
+
+[[package]]
 name = "fonttools"
 version = "4.62.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1463,7 +1485,6 @@ dependencies = [
     { name = "pandas" },
     { name = "peft" },
     { name = "protobuf" },
-    { name = "requests" },
     { name = "seaborn" },
     { name = "sentencepiece" },
     { name = "setuptools" },
@@ -1491,6 +1512,8 @@ dev = [
     { name = "flake8-isort" },
     { name = "flake8-length" },
     { name = "flake8-max-function-length" },
+    { name = "flake8-new-union-types" },
+    { name = "flake8-pep585" },
     { name = "hypothesis" },
     { name = "pep8-naming" },
     { name = "pyright" },
@@ -1510,14 +1533,13 @@ requires-dist = [
     { name = "pandas", specifier = "==2.3.3" },
     { name = "peft", specifier = "==0.18.1" },
     { name = "protobuf", specifier = "==7.34.1" },
-    { name = "requests", specifier = "==2.32.5" },
     { name = "seaborn", specifier = "==0.13.2" },
     { name = "sentencepiece", specifier = "==0.2.1" },
     { name = "setuptools", specifier = "==80.9.0" },
     { name = "torch", specifier = "==2.9.0+cu128", index = "https://download.pytorch.org/whl/cu128" },
     { name = "tqdm", specifier = "==4.67.1" },
     { name = "transformers", specifier = "==5.5.4" },
-    { name = "trl", specifier = "==0.29.1" },
+    { name = "trl", specifier = "==1.2.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -1538,6 +1560,8 @@ dev = [
     { name = "flake8-isort", specifier = "==6.1.2" },
     { name = "flake8-length", specifier = "==0.3.1" },
     { name = "flake8-max-function-length", specifier = "==0.9.0" },
+    { name = "flake8-new-union-types", specifier = "==0.4.1" },
+    { name = "flake8-pep585", specifier = "==0.1.7" },
     { name = "hypothesis", specifier = "==6.138.14" },
     { name = "pep8-naming", specifier = "==0.15.1" },
     { name = "pyright", specifier = "==1.1.405" },
@@ -3264,17 +3288,18 @@ wheels = [
 
 [[package]]
 name = "trl"
-version = "0.29.1"
+version = "1.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "accelerate" },
     { name = "datasets" },
+    { name = "jinja2" },
     { name = "packaging" },
     { name = "transformers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3f/01/87b09019a9be4c73f8fb07ac9db1dccbeb78743fc17b6f3175ebe0a31a70/trl-0.29.1.tar.gz", hash = "sha256:12df5aa22d1deb26942cafdf4cfd75f53d7141942e70c4dc0966687a3617813b", size = 453604, upload-time = "2026-03-20T03:43:34.578Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0d/d6/2d3d876917d43537afea7b502abb318ae071295e4accac222741b548399e/trl-1.2.0.tar.gz", hash = "sha256:f5038b21295d2559992a087ea8d9ca10f74cde23e6760861def209811ab45d00", size = 583112, upload-time = "2026-04-17T01:04:17.706Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/3b/33226ae50a36f718e1107ece0c91b016457bb4b956d1cb5bd7078c04de9c/trl-0.29.1-py3-none-any.whl", hash = "sha256:f9490cd1af93f3dce1cfdfe0fa1de108dbc46a2f6c2f90485cc2b4021c43eef3", size = 530959, upload-time = "2026-03-20T03:43:33.02Z" },
+    { url = "https://files.pythonhosted.org/packages/02/82/bad1a22ff4b21d8080f7a64d8313c1ac0e791b455b98f2efca1ef3e14b8f/trl-1.2.0-py3-none-any.whl", hash = "sha256:f6ddfa162ac92d25973070d9e3f6cff71b32c52edc34539e4294722f9dc0a6d6", size = 697449, upload-time = "2026-04-17T01:04:16.007Z" },
 ]
 
 [[package]]

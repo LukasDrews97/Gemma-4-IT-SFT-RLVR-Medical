@@ -1,10 +1,11 @@
-# Devcontainer
+# Devcontainer & local settings
 Makefile
 .dockerignore
 .devcontainer/
+.isort.cfg
 
 # hf cache
-gemma-text-to-sql/
+gemma-PubMedQA-SFT/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
