@@ -6,7 +6,9 @@ from transformers import AutoTokenizer
 from config import TOKENIZER_ID
 
 
-def get_dataset(n_train_samples="all", n_test_samples="all"):
+def get_dataset(
+    n_sft_samples="all", n_rlvr_samples="all", n_test_samples="all", rlvr: bool = False
+):
     train_data = load_dataset("pubmed_qa", "pqa_artificial", split="train")
     test_data = load_dataset("pubmed_qa", "pqa_labeled", split="train")
 
@@ -34,33 +36,47 @@ def get_dataset(n_train_samples="all", n_test_samples="all"):
         ]
 
         full_prompt = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=False
+            messages, tokenize=False, add_generation_prompt=False
         )
 
-        return {
-            "text": full_prompt,              # Used by SFTTrainer
-            "messages": messages,             # Used for evaluation
+        res = {
+            "text": full_prompt,  # Used by SFTTrainer
+            "messages": messages,  # Used for evaluation
             "ground_truth": sample["final_decision"],
         }
 
+        if rlvr:
+            res["prompt"] = [messages[0]]
+
+        return res
+
     train_dataset = train_data.shuffle(seed=123)
+    split_dict = train_dataset.train_test_split(test_size=0.5, shuffle=False)
+    sft_dataset, rlvr_dataset = split_dict["train"], split_dict["test"]
     test_dataset = test_data
 
-    if n_train_samples != "all":
-        n_train_samples = min(n_train_samples, len(train_dataset))
-        train_dataset = train_dataset.select(range(n_train_samples))
+    if n_sft_samples != "all":
+        n_sft_samples = min(n_sft_samples, len(sft_dataset))
+        sft_dataset = sft_dataset.select(range(n_sft_samples))
+
+    if n_rlvr_samples != "all":
+        n_rlvr_samples = min(n_rlvr_samples, len(rlvr_dataset))
+        rlvr_dataset = rlvr_dataset.select(range(n_rlvr_samples))
 
     if n_test_samples != "all":
         n_test_samples = min(n_test_samples, len(test_dataset))
         test_dataset = test_dataset.select(range(n_test_samples))
 
-    train_dataset = train_dataset.map(
+    sft_dataset = sft_dataset.map(
         preprocess_med, remove_columns=train_data.column_names, num_proc=os.cpu_count()
     )
+
+    rlvr_dataset = rlvr_dataset.map(
+        preprocess_med, remove_columns=train_data.column_names, num_proc=os.cpu_count()
+    )
+
     test_dataset = test_dataset.map(
         preprocess_med, remove_columns=test_data.column_names, num_proc=os.cpu_count()
     )
 
-    return train_dataset, test_dataset
+    return sft_dataset, rlvr_dataset, test_dataset

@@ -3,7 +3,7 @@ from peft import PeftModel
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from config import MODEL_ID, N_TEST_SAMPLES, SFT_PATH, TOKENIZER_ID
+from config import MODEL_ID, N_TEST_SAMPLES, RLVR_PATH, SFT_PATH, TOKENIZER_ID
 from pubmedqa_dataset import get_dataset
 
 
@@ -11,21 +11,13 @@ def main() -> None:
     # Load Tokenizer and Base Model
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
     model = AutoModelForCausalLM.from_pretrained(
-        MODEL_ID, dtype=torch.bfloat16, device_map="auto"
+        MODEL_ID,
+        dtype=torch.bfloat16,
+        device_map="auto",
+        attn_implementation="sdpa",
     )
 
-    _, test_dataset = get_dataset(n_test_samples=N_TEST_SAMPLES)
-
-    def get_decision(text: str) -> str:
-        """Simple parser to extract the 'yes/no/maybe' from the end of the response."""
-        text = text.lower().strip()
-        if "final decision: yes" in text:
-            return "yes"
-        if "final decision: no" in text:
-            return "no"
-        if "final decision: maybe" in text:
-            return "maybe"
-        return "unknown"
+    _, _, test_dataset = get_dataset(n_test_samples=N_TEST_SAMPLES)
 
     def evaluate(model, dataset, name="Model"):
         correct = 0
@@ -67,12 +59,30 @@ def main() -> None:
     base_acc = evaluate(model, test_dataset, name="Gemma 4")
 
     # Evaluate SFT Model
-    model = PeftModel.from_pretrained(model, SFT_PATH)
-    model.eval()
+    sft_model = PeftModel.from_pretrained(model, SFT_PATH)
+    sft_model.eval()
 
-    ft_acc = evaluate(model, test_dataset, name="Finetuned Gemma (SFT)")
+    sft_acc = evaluate(sft_model, test_dataset, name="Finetuned Gemma 4 (SFT)")
 
-    print(f"\nSummary:\nBase: {base_acc}%\nSFT: {ft_acc}%")
+    # Evaluate RLVR Model
+    rlvr_model = AutoModelForCausalLM.from_pretrained(
+        RLVR_PATH, dtype=torch.bfloat16, device_map="auto"
+    )
+    rlvr_acc = evaluate(rlvr_model, test_dataset, name="Finetuned Gemma 4 (SFT + RLVR)")
+
+    print(f"\nSummary:\nBase: {base_acc}%\nSFT: {sft_acc}%\n SFT + RLVR: {rlvr_acc}%")
+
+
+def get_decision(text: str) -> str:
+    """Simple parser to extract the 'yes/no/maybe' from the end of the response."""
+    text = text.lower().strip()
+    if "final decision: yes" in text:
+        return "yes"
+    if "final decision: no" in text:
+        return "no"
+    if "final decision: maybe" in text:
+        return "maybe"
+    return "unknown"
 
 
 if __name__ == "__main__":

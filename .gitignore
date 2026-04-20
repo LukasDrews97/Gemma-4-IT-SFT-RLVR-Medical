@@ -6,6 +6,7 @@ Makefile
 
 # hf cache
 gemma-PubMedQA-SFT/
+gemma-PubMedQA-RLVR/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

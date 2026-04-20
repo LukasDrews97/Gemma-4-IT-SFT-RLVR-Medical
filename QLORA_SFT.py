@@ -5,9 +5,9 @@ from trl import SFTConfig, SFTTrainer
 
 from config import (
     MODEL_ID,
+    N_SFT_SAMPLES,
+    N_SFT_TRAIN_EPOCHS,
     N_TEST_SAMPLES,
-    N_TRAIN_EPOCHS,
-    N_TRAIN_SAMPLES,
     SFT_PATH,
     TOKENIZER_ID,
 )
@@ -15,27 +15,9 @@ from pubmedqa_dataset import get_dataset
 
 
 def main() -> None:
-    train_dataset, test_dataset = get_dataset(
-        n_train_samples=N_TRAIN_SAMPLES, n_test_samples=N_TEST_SAMPLES
+    train_dataset, _, test_dataset = get_dataset(
+        n_sft_samples=N_SFT_SAMPLES, n_test_samples=N_TEST_SAMPLES
     )
-    print(f"Training on: {len(train_dataset)} samples")
-    print(f"Testing on: {len(test_dataset)} expert samples")
-
-    # Print a clear preview of the first training sample
-    first_sample = train_dataset[0]["messages"]
-
-    print("\n" + "=" * 50)
-    print("--- PROMPT PREVIEW ---")
-    print(first_sample[0]["content"])
-
-    print("\n--- TARGET RESPONSE ---")
-    print(first_sample[1]["content"])
-    print("=" * 50 + "\n")
-
-    # Print the raw list of message dictionaries for debugging
-    print("RAW MESSAGE STRUCTURE:")
-    for item in first_sample:
-        print(item)
 
     # Define model init arguments
     model_kwargs = dict(
@@ -53,7 +35,12 @@ def main() -> None:
     )
 
     # Load model and tokenizer
-    model = AutoModelForCausalLM.from_pretrained(MODEL_ID, **model_kwargs)
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_ID,
+        dtype=torch.bfloat16,
+        device_map="auto",
+        attn_implementation="sdpa",
+    )
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
 
     peft_config = LoraConfig(
@@ -68,26 +55,27 @@ def main() -> None:
     )
 
     args = SFTConfig(
-        output_dir=SFT_PATH,  # directory to save and repository id
-        max_length=2048,  # max length for model and packing of the dataset
-        num_train_epochs=N_TRAIN_EPOCHS,  # number of training epochs
+        output_dir=SFT_PATH,
+        max_length=2048,
+        num_train_epochs=N_SFT_TRAIN_EPOCHS,
         completion_only_loss=True,
-        per_device_train_batch_size=1,  # batch size per device during training
+        per_device_train_batch_size=1,
         gradient_accumulation_steps=4,
-        optim="adamw_torch_fused",  # use fused adamw optimizer
-        logging_steps=10,  # log every 10 steps
-        save_strategy="epoch",  # save checkpoint every epoch
-        eval_strategy="epoch",  # evaluate checkpoint every epoch
-        learning_rate=5e-5,  # learning rate
+        optim="adamw_torch_fused",
+        logging_steps=10,
+        save_strategy="epoch",
+        eval_strategy="epoch",
+        learning_rate=5e-5,
         fp16=False,
-        bf16=True,  # BF16 strictly enabled
+        bf16=True,
         max_grad_norm=0.3,  # max gradient norm based on QLoRA paper
-        lr_scheduler_type="constant",  # use constant learning rate scheduler
-        push_to_hub=False,  # push model to hub
+        lr_scheduler_type="constant",
+        push_to_hub=False,
         load_best_model_at_end=True,
+        use_liger_kernel=True,
         dataset_kwargs={
-            "add_special_tokens": False,  # Template with special tokens
-            "append_concat_token": True,  # Add EOS token as separator token between examples
+            "add_special_tokens": False,
+            "append_concat_token": True,
         },
     )
 
