@@ -988,7 +988,7 @@ http = [
 ]
 
 [[package]]
-name = "gemma-4-sft-rlvr-medical"
+name = "gemma-4-it-sft-rlvr-medical"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
