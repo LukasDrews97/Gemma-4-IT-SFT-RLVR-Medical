@@ -49,7 +49,6 @@ def main() -> None:
             rewards.append(1.0 if prediction == target.lower() else 0.0)
         return rewards
 
-    # 2. Setup GRPOTrainer
     trainer = GRPOTrainer(
         model=sft_model,
         reward_funcs=[accuracy_reward],

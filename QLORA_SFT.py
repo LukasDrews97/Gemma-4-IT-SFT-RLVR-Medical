@@ -19,13 +19,12 @@ def main() -> None:
         n_sft_samples=N_SFT_SAMPLES, n_test_samples=N_TEST_SAMPLES
     )
 
-    # Define model init arguments
     model_kwargs = dict(
         dtype=torch.bfloat16,
         device_map="auto",
     )
 
-    # BitsAndBytesConfig: Enables 4-bit quantization to reduce model size/memory usage
+    # 4-bit quantization to reduce model size/memory usage
     model_kwargs["quantization_config"] = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_use_double_quant=True,
@@ -79,7 +78,6 @@ def main() -> None:
         },
     )
 
-    # Create Trainer object
     trainer = SFTTrainer(
         model=model,
         args=args,
