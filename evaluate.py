@@ -83,7 +83,9 @@ def main() -> None:
         return accuracy, precision, recall
 
     # Evaluate Base Model
-    base_acc, base_pre, base_recall = evaluate(get_base_model(), test_dataset, name="Gemma 4")
+    base_acc, base_pre, base_recall = evaluate(
+        get_base_model(), test_dataset, name="Gemma 4"
+    )
     torch.cuda.empty_cache()
 
     # Evaluate SFT Model
@@ -116,7 +118,6 @@ def main() -> None:
     print(
         f"\nSFT + RLVR:\nAccuracy: {rlvr_acc}, Precision: {rlvr_pre}, Recall: {rlvr_recall}"
     )
-
 
 
 def get_decision(text: str) -> str:
