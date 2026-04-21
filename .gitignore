@@ -4,9 +4,10 @@ Makefile
 .devcontainer/
 .isort.cfg
 
-# hf cache
+# models
 gemma-PubMedQA-SFT/
 gemma-PubMedQA-RLVR/
+finetuned_models/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
