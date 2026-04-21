@@ -36,6 +36,10 @@ Final Decision: yes
 
 ## One-command setup with uv
 
+Requirements:
+- uv
+- CMake (for quantization)
+
 ```bash
 uv sync --no-dev &&
 uv run QLORA_SFT.py && 
@@ -48,9 +52,19 @@ uv run evaluate.py
 
 All models are evaluated on a holdout evaluation dataset of 1000 samples. Experiments ran on a RTX 5070 Ti.
 
+
+### Gemma-4-E2B-it 
+| **Model**                   | **# SFT samples** | **# RLVR samples** |  **# Evaluation samples** | **PubMedQA Accuracy** |
+|------------------------------------|------------------:|-------------------:|----------:|----------------------:|
+| Gemma-4-E2B-it (base model)        | -                 | -                  | 1000      | 58.10 %               |
+| Gemma-4-E2B-it + SFT + RLVR        | 1024 (3 epochs)   | 256                | 1000      | 73.10%                |
+| Gemma-4-E2B-it + SFT + RLVR Q8_0   | -                 | -                  | 1000      |                       |
+| Gemma-4-E2B-it + SFT + RLVR Q6_K   | -                 | -                  | 1000      |                       |
+| Gemma-4-E2B-it + SFT + RLVR Q5_K_M | -                 | -                  | 1000      |                       |
+| Gemma-4-E2B-it + SFT + RLVR Q4_K_M | -                 | -                  | 1000      |                       |
+
+### Gemma-4-E4B-it 
 | **Model**                   | **# SFT samples** | **# RLVR samples** |  **# Evaluation samples** | **PubMedQA Accuracy** |
 |-----------------------------|------------------:|-------------------:|----------:|----------------------:|
-| Gemma-4-E2B-it (base model) | -                 | -                  | 1000      | 58.10 %               |
-| Gemma-4-E2B-it + SFT + RLVR | 1024 (3 epochs)   | 256                | 1000      | 73.10%                |
 | Gemma-4-E4B-it (base model) | -                 | -                  | 1000      | Work in Progress      |
 | Gemma-4-E4B-it + SFT + RLVR | 1024 (3 epochs)   | 256                | 1000      | Work in Progress      |
