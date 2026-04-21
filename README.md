@@ -7,8 +7,8 @@ Gemma-4-it finetuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and R
 <b>Question:</b> `Do GEC produce and bear factor H under complement attack?` <br>
 <b>Answer: </b>
 ```
-This study was the first to demonstrate that factor H was expressed as a protein on the membrane of GEC. Since GEC are an important target in the development of complement-mediated kidney injury, and factor H is involved in the ability of the kidney to produce factor H, the study thus provides a new perspective on the interactions between factor H and GEC. <br>
-Final Decision: yes <br>
+This study was the first to demonstrate that factor H was expressed as a protein on the membrane of GEC. Since GEC are an important target in the development of complement-mediated kidney injury, and factor H is involved in the ability of the kidney to produce factor H, the study thus provides a new perspective on the interactions between factor H and GEC.
+Final Decision: yes
 ```
 
 <details>

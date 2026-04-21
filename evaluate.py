@@ -11,13 +11,15 @@ from pubmedqa_dataset import get_dataset
 def main() -> None:
     # Load Tokenizer and Base Model
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_ID,
-        dtype=torch.bfloat16,
-        device_map="auto",
-        attn_implementation="sdpa",
-        offload_buffers=True,
-    )
+
+    def get_base_model():
+        return AutoModelForCausalLM.from_pretrained(
+            MODEL_ID,
+            dtype=torch.bfloat16,
+            device_map="auto",
+            attn_implementation="sdpa",
+            offload_buffers=True,
+        )
 
     _, _, test_dataset = get_dataset(n_test_samples=N_TEST_SAMPLES)
 
@@ -81,10 +83,11 @@ def main() -> None:
         return accuracy, precision, recall
 
     # Evaluate Base Model
-    base_acc, base_pre, base_recall = evaluate(model, test_dataset, name="Gemma 4")
+    base_acc, base_pre, base_recall = evaluate(get_base_model(), test_dataset, name="Gemma 4")
+    torch.cuda.empty_cache()
 
     # Evaluate SFT Model
-    sft_model = PeftModel.from_pretrained(model, SFT_PATH)
+    sft_model = PeftModel.from_pretrained(get_base_model(), SFT_PATH)
     sft_model.eval()
 
     sft_acc, sft_pre, sft_recall = evaluate(
@@ -95,20 +98,15 @@ def main() -> None:
     torch.cuda.empty_cache()
 
     # Evaluate RLVR Model
-    rlvr_model = AutoModelForCausalLM.from_pretrained(
-        RLVR_PATH,
-        dtype=torch.bfloat16,
-        device_map="auto",
-        attn_implementation="sdpa",
-        offload_buffers=True,
-    )
-
-    rlvr_model = PeftModel.from_pretrained(model, RLVR_PATH)
+    rlvr_model = PeftModel.from_pretrained(get_base_model(), RLVR_PATH)
     rlvr_model.eval()
 
     rlvr_acc, rlvr_pre, rlvr_recall = evaluate(
         rlvr_model, test_dataset, name="Finetuned Gemma 4 (SFT + RLVR)"
     )
+
+    del rlvr_model
+    torch.cuda.empty_cache()
 
     print("Summary:")
     print(
@@ -119,7 +117,6 @@ def main() -> None:
         f"\nSFT + RLVR:\nAccuracy: {rlvr_acc}, Precision: {rlvr_pre}, Recall: {rlvr_recall}"
     )
 
-    # print(f"\nSummary:\nBase: {base_acc}%\nSFT: {sft_acc}%\nSFT + RLVR: {rlvr_acc}%")
 
 
 def get_decision(text: str) -> str:

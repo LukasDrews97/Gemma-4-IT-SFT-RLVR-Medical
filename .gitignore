@@ -3,6 +3,7 @@ Makefile
 .dockerignore
 .devcontainer/
 .isort.cfg
+notes
 
 # models
 gemma-PubMedQA-SFT/
