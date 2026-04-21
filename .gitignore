@@ -9,6 +9,7 @@ notes
 gemma-PubMedQA-SFT/
 gemma-PubMedQA-RLVR/
 finetuned_models/
+llama.cpp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
