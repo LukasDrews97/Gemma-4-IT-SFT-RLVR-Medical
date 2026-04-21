@@ -23,8 +23,18 @@ def main() -> None:
         attn_implementation="sdpa",
     )
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
-    sft_model = PeftModel.from_pretrained(base_model, SFT_PATH)
-    sft_model = sft_model.merge_and_unload()
+    tokenizer.pad_token = tokenizer.eos_token
+
+    base_model.config.eos_token_id = tokenizer.eos_token_id
+    base_model.config.bos_token_id = tokenizer.bos_token_id
+    base_model.config.pad_token_id = tokenizer.pad_token_id
+
+    # 3. If there is a generation_config, update that too
+    if hasattr(base_model, "generation_config"):
+        base_model.generation_config.eos_token_id = tokenizer.eos_token_id
+        base_model.generation_config.pad_token_id = tokenizer.pad_token_id
+
+    sft_model = PeftModel.from_pretrained(base_model, SFT_PATH, is_trainable=True)
 
     _, train_dataset, test_dataset = get_dataset(
         n_rlvr_samples=N_RLVR_SAMPLES, n_test_samples=N_TEST_SAMPLES, rlvr=True
@@ -44,9 +54,50 @@ def main() -> None:
                 pred_text = pred[0]["content"]
             else:
                 pred_text = pred
-            prediction = get_decision(pred_text)
-            # Binary reward: 1 for correct, 0 for wrong
-            rewards.append(1.0 if prediction == target.lower() else 0.0)
+            pred_label = get_decision(pred_text)
+            score = 0.0
+
+            if pred_label == target.lower():
+                score += 1.0
+
+            has_thinking_tag = (
+                "thinking" in pred_text.lower() or "reasoning" in pred_text.lower()
+            )
+            if has_thinking_tag:
+                score += 0.5
+            else:
+                score -= 0.5
+
+            cot_keywords = [
+                "because",
+                "therefore",
+                "suggests",
+                "first",
+                "second",
+                "third",
+                "step",
+                "leads to",
+                "activation of",
+                "consequently",
+            ]
+            num_keywords = sum(1 for word in cot_keywords if word in pred_text.lower())
+
+            # Bonus for using chain-of-thought structure
+            score += min(num_keywords * 0.1, 0.4)
+
+            score += len(pred_text) / 5000
+
+            if len(pred_text) > 2500:
+                score -= 1.0
+
+            if len(pred_text) < 150:
+                score -= 0.8
+
+            print(
+                "SCORE: ", score, "LEN: ", len(pred_text), "CONTENT: ", pred_text, "\n"
+            )
+
+            rewards.append(score)
         return rewards
 
     trainer = GRPOTrainer(
@@ -54,15 +105,23 @@ def main() -> None:
         reward_funcs=[accuracy_reward],
         args=GRPOConfig(
             output_dir=RLVR_PATH,
-            learning_rate=5e-6,
-            num_generations=8,
-            generation_batch_size=8,
-            per_device_train_batch_size=8,  # Equal to num_generations
-            gradient_accumulation_steps=4,
-            max_completion_length=2048,
-            logging_steps=10,
+            save_strategy="steps",
+            save_steps=25,
+            save_total_limit=5,
+            learning_rate=1e-6,
+            lr_scheduler_type="cosine",
+            warmup_ratio=0.1,
+            temperature=0.8,
+            beta=0.005,
+            num_generations=8,  # 8 or 16
+            generation_batch_size=8,  # 8 or 16
+            per_device_train_batch_size=1,
+            gradient_accumulation_steps=16,
+            max_completion_length=768,
+            logging_steps=1,
             bf16=True,
-            use_liger_kernel=True,
+            gradient_checkpointing=True,
+            use_liger_kernel=False,
             use_vllm=False,
         ),
         train_dataset=train_dataset,

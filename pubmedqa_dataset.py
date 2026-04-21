@@ -13,6 +13,7 @@ def get_dataset(
     test_data = load_dataset("pubmed_qa", "pqa_labeled", split="train")
 
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
+    tokenizer.pad_token = tokenizer.eos_token
 
     # map sample to output
     def preprocess_med(sample):
@@ -46,7 +47,9 @@ def get_dataset(
         }
 
         if rlvr:
-            res["prompt"] = [messages[0]]
+            res["prompt"] = tokenizer.apply_chat_template(
+                [messages[0]], tokenize=False, add_generation_prompt=True
+            )
 
         return res
 
