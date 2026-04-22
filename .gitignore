@@ -4,6 +4,7 @@ Makefile
 .devcontainer/
 .isort.cfg
 notes
+.vscode/
 
 # models
 gemma-PubMedQA-SFT/
