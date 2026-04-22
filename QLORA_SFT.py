@@ -10,6 +10,7 @@ from config import (
     N_TEST_SAMPLES,
     SFT_PATH,
     TOKENIZER_ID,
+    USE_QLORA
 )
 from pubmedqa_dataset import get_dataset
 
@@ -19,19 +20,22 @@ def main() -> None:
         n_sft_samples=N_SFT_SAMPLES, n_test_samples=N_TEST_SAMPLES
     )
 
-    model_kwargs = dict(
-        dtype=torch.bfloat16,
-        device_map="auto",
-    )
+    if USE_QLORA:
+        model_kwargs = dict(
+            dtype=torch.bfloat16,
+            device_map="auto",
+        )
 
-    # 4-bit quantization to reduce model size/memory usage
-    model_kwargs["quantization_config"] = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
-        bnb_4bit_quant_storage=torch.bfloat16,
-    )
+        # 4-bit quantization to reduce model size/memory usage
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_quant_storage=torch.bfloat16,
+        )
+    else:
+        model_kwargs = {}
 
     # Load model and tokenizer
     model = AutoModelForCausalLM.from_pretrained(
@@ -39,6 +43,7 @@ def main() -> None:
         dtype=torch.bfloat16,
         device_map="auto",
         attn_implementation="sdpa",
+        **model_kwargs,
     )
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_ID)
 
