@@ -23,7 +23,6 @@ def merge_and_export(adapter_path: str, output_path: str) -> None:
 
     model = PeftModel.from_pretrained(base_model, adapter_path, device_map="cpu")
     merged_model = model.merge_and_unload()
-    merged_model.config.tie_word_embeddings = False
 
     print(f"Saving to {output_path}")
     merged_model.save_pretrained(
