@@ -9,7 +9,7 @@ dependencies = [
     # Machine Learning
     "torch==2.10.0+cu128", # CUDA-enabled PyTorch
 
-    # built newest version from Github
+    # build newest version from Github
     "transformers",
     "accelerate",
     "gguf",
@@ -22,11 +22,6 @@ dependencies = [
     "peft==0.18.1",
     "sentencepiece==0.2.1",
     "torchmetrics==1.9.0",
-
-    #"accelerate==1.13.0",
-    #"transformers==5.5.4",
-    #"gguf==0.18.0",
-    #"llama-cpp-python==0.3.20",
     
     # Datasets
     "datasets==4.8.4",
