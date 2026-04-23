@@ -1,5 +1,11 @@
 # Gemma-4-IT-SFT-RLVR-Medical
 
+[![Gemma-4-IT-SFT-RLVR-Medical](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
+
+[![Gemma-4-IT-SFT-RLVR-Medical-Q8_0](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q8__0-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
+
+[![Gemma-4-IT-SFT-RLVR-Medical-Q4_K_M](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q4__K__M-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
+
 Gemma-4-it finetuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and RLVR.
 
 ### Sample Output with Reasoning (SFT + RLVR): <br>
@@ -54,17 +60,23 @@ All models are evaluated on a holdout evaluation dataset of 1000 samples. Experi
 
 
 ### Gemma-4-E2B-it 
-| **Model**                   | **# SFT samples** | **# RLVR samples** |  **# Evaluation samples** | **PubMedQA Accuracy** |
-|------------------------------------|------------------:|-------------------:|----------:|----------------------:|
-| Gemma-4-E2B-it (base model)        | -                 | -                  | 1000      | 58.10 %               |
-| Gemma-4-E2B-it + SFT + RLVR        | 1024 (3 epochs)   | 256                | 1000      | 73.10%                |
-| Gemma-4-E2B-it + SFT + RLVR Q8_0   | -                 | -                  | 1000      |                       |
-| Gemma-4-E2B-it + SFT + RLVR Q6_K   | -                 | -                  | 1000      |                       |
-| Gemma-4-E2B-it + SFT + RLVR Q5_K_M | -                 | -                  | 1000      |                       |
-| Gemma-4-E2B-it + SFT + RLVR Q4_K_M | -                 | -                  | 1000      |                       |
+| **Model**                          | **Quantization** | **PubMedQA** |
+|------------------------------------|------------------|:------------:|
+| Gemma-4-E2B-it (base model)        | -                | 58.10 %      |
+| Gemma-4-E2B-it + SFT + RLVR        | -                | 73.10 %      |
+| Gemma-4-E2B-it + SFT + RLVR        | Q8_0             | 72.40 %      |
+| Gemma-4-E2B-it + SFT + RLVR        | Q6_K             | 72.10 %      |
+| Gemma-4-E2B-it + SFT + RLVR        | Q5_K_M           | 72.00 %      |
+| Gemma-4-E2B-it + SFT + RLVR        | Q4_K_M           | 71.80 %      |
+
+
 
 ### Gemma-4-E4B-it 
-| **Model**                   | **# SFT samples** | **# RLVR samples** |  **# Evaluation samples** | **PubMedQA Accuracy** |
-|-----------------------------|------------------:|-------------------:|----------:|----------------------:|
-| Gemma-4-E4B-it (base model) | -                 | -                  | 1000      | Work in Progress      |
-| Gemma-4-E4B-it + SFT + RLVR | 1024 (3 epochs)   | 256                | 1000      | Work in Progress      |
+| **Model**                          | **Quantization** | **PubMedQA** |
+|------------------------------------|------------------|:------------:|
+| Gemma-4-E4B-it (base model)        | -                | TODO         |
+| Gemma-4-E4B-it + SFT + RLVR        | -                | TODO         |
+| Gemma-4-E4B-it + SFT + RLVR        | Q8_0             | TODO         |
+| Gemma-4-E4B-it + SFT + RLVR        | Q6_K             | TODO         |
+| Gemma-4-E4B-it + SFT + RLVR        | Q5_K_M           | TODO         |
+| Gemma-4-E4B-it + SFT + RLVR        | Q4_K_M           | TODO         |
