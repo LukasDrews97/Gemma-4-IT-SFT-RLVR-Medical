@@ -16,12 +16,9 @@ from config import (
     SFT_PATH,
     TOKENIZER_ID,
 )
-from hf_datasets.medmcqa_dataset import get_dataset as medmcqa_get_dataset
-from hf_datasets.medmcqa_dataset import get_decision as medmcqa_get_decision
-from hf_datasets.medqa_dataset import get_dataset as medqa_get_dataset
-from hf_datasets.medqa_dataset import get_decision as medqa_get_decision
-from hf_datasets.pubmedqa_dataset import get_dataset as pubmedqa_get_dataset
-from hf_datasets.pubmedqa_dataset import get_decision as pubmedqa_get_decision
+from hf_datasets.medmcqa_dataset import MedMCQADataset
+from hf_datasets.medqa_dataset import MedQADataset
+from hf_datasets.pubmedqa_dataset import PubMedQADataset
 
 
 def main() -> None:
@@ -37,24 +34,24 @@ def main() -> None:
             offload_buffers=True,
         )
 
-    def evaluate(model, dataset, decision_func, label_map, name="Model", device="cuda"):
+    def evaluate(model, dataset_class, n_test_samples, name="Model", device="cuda"):
         device = model.device if hasattr(model, "device") else device
-        num_classes = len(label_map.keys())
-        #label_map = {"yes": 0, "no": 1, "maybe": 2}
 
         precision_metric = MulticlassPrecision(
-            num_classes=num_classes, average="macro"
+            num_classes=len(dataset_class.label_map.keys()), average="macro"
         ).to(device)
-        recall_metric = MulticlassRecall(num_classes=num_classes, average="macro").to(
-            device
-        )
+        recall_metric = MulticlassRecall(
+            num_classes=len(dataset_class.label_map.keys()), average="macro"
+        ).to(device)
+
+        _, _, dataset = dataset_class.get_dataset(n_test_samples=n_test_samples)
 
         correct = 0
         total = len(dataset)
 
         print(f"Evaluating {name}")
         for sample in tqdm(dataset):
-            prompt = tokenizer.apply_chat_template(
+            prompt = dataset_class.tokenizer.apply_chat_template(
                 sample["messages"][:1], tokenize=False, add_generation_prompt=True
             )
 
@@ -80,14 +77,14 @@ def main() -> None:
                     generated_tokens, skip_special_tokens=True
                 )
 
-            pred_decision = decision_func(prediction_text)
+            pred_decision = dataset_class.get_decision(prediction_text).lower()
             ground_truth = sample["ground_truth"].lower()
 
             if pred_decision == ground_truth:
                 correct += 1
 
-            p_idx = label_map.get(pred_decision, -1)
-            g_idx = label_map.get(ground_truth)
+            p_idx = dataset_class.label_map.get(pred_decision, -1)
+            g_idx = dataset_class.label_map.get(ground_truth)
             if p_idx != -1:
                 p_tensor = torch.tensor([p_idx]).to(device)
                 g_tensor = torch.tensor([g_idx]).to(device)
@@ -102,20 +99,19 @@ def main() -> None:
         print(f"{name} Recall: {recall:.2f}%")
         return accuracy, precision, recall
 
-    _, _, pubmedqa = pubmedqa_get_dataset(n_test_samples=N_TEST_SAMPLES)
-    medmcqa = medmcqa_get_dataset(n_test_samples=N_TEST_SAMPLES)
-    medqa = medqa_get_dataset(n_test_samples=N_TEST_SAMPLES)
-
     datasets = [
-        ("PubMedQA", pubmedqa, pubmedqa_get_decision, {"yes": 0, "no": 1, "maybe": 2}),
-        ("MedMCQA", medmcqa, medmcqa_get_decision, {0: "A", 1: "B", 2: "C", 3: "D"}),
-        ("MedQA", medqa, medqa_get_decision, {0: "A", 1: "B", 2: "C", 3: "D"}),
+        ("PubMedQA", PubMedQADataset()),
+        ("MedQA", MedQADataset()),
+        ("MedMCQA", MedMCQADataset()),
     ]
 
-    for dataset_name, dataset, decision_func, label_map in datasets:
+    for dataset_name, dataset in datasets:
         # Evaluate Base Model
         base_acc, base_pre, base_recall = evaluate(
-            get_base_model(), dataset, decision_func, label_map, name=f"Gemma 4-{dataset_name}"
+            get_base_model(),
+            dataset,
+            n_test_samples=N_TEST_SAMPLES,
+            name=f"Gemma 4-{dataset_name}",
         )
         torch.cuda.empty_cache()
 
@@ -126,8 +122,7 @@ def main() -> None:
         sft_acc, sft_pre, sft_recall = evaluate(
             sft_model,
             dataset,
-            decision_func,
-            label_map,
+            n_test_samples=N_TEST_SAMPLES,
             name=f"Finetuned Gemma 4 (SFT)-{dataset_name}",
         )
 
@@ -141,8 +136,7 @@ def main() -> None:
         rlvr_acc, rlvr_pre, rlvr_recall = evaluate(
             rlvr_model,
             dataset,
-            decision_func,
-            label_map,
+            n_test_samples=N_TEST_SAMPLES,
             name=f"Finetuned Gemma 4 (SFT + RLVR)-{dataset_name}",
         )
 
@@ -151,6 +145,8 @@ def main() -> None:
 
         # Evaluate quantized models
         gguf_files = list(Path(QUANTIZATION_FOLDER).rglob("*.gguf"))
+        # only evaluate sft-rlvr for now
+        # gguf_files = [f for f in gguf_files if "sft-rlvr" in str(f)]
 
         for qt_model_path in gguf_files:
             qt_model = Llama(
@@ -161,7 +157,11 @@ def main() -> None:
                 flash_attn=True,
             )
             qt_acc, qt_pre, qt_rec = evaluate(
-                qt_model, dataset, decision_func, label_map, name=f"{qt_model_path}-{dataset_name}"
+                qt_model,
+                dataset,
+                n_test_samples=N_TEST_SAMPLES,
+                device="cpu",
+                name=f"{qt_model_path}-{dataset_name}",
             )
             print(
                 f"{qt_model_path}-{dataset_name}: Accuracy: {qt_acc}, Precision: {qt_pre}, Recall: {qt_rec}"

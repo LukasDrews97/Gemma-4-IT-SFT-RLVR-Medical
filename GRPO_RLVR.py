@@ -11,8 +11,7 @@ from config import (
     SFT_PATH,
     TOKENIZER_ID,
 )
-from evaluate import get_decision
-from hf_datasets.pubmedqa_dataset import get_dataset
+from hf_datasets.pubmedqa_dataset import PubMedQADataset
 
 
 def main() -> None:
@@ -36,7 +35,7 @@ def main() -> None:
 
     sft_model = PeftModel.from_pretrained(base_model, SFT_PATH, is_trainable=True)
 
-    _, train_dataset, test_dataset = get_dataset(
+    _, train_dataset, test_dataset = PubMedQADataset().get_dataset(
         n_rlvr_samples=N_RLVR_SAMPLES, n_test_samples=N_TEST_SAMPLES, rlvr=True
     )
 
@@ -54,7 +53,7 @@ def main() -> None:
                 pred_text = pred[0]["content"]
             else:
                 pred_text = pred
-            pred_label = get_decision(pred_text)
+            pred_label = PubMedQADataset.get_decision(pred_text)
             score = 0.0
 
             if pred_label == target.lower():
@@ -92,10 +91,6 @@ def main() -> None:
 
             if len(pred_text) < 150:
                 score -= 0.8
-
-            print(
-                "SCORE: ", score, "LEN: ", len(pred_text), "CONTENT: ", pred_text, "\n"
-            )
 
             rewards.append(score)
         return rewards

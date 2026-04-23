@@ -12,11 +12,11 @@ from config import (
     TOKENIZER_ID,
     USE_QLORA,
 )
-from hf_datasets.pubmedqa_dataset import get_dataset
+from hf_datasets.pubmedqa_dataset import PubMedQADataset
 
 
 def main() -> None:
-    train_dataset, _, test_dataset = get_dataset(
+    train_dataset, _, test_dataset = PubMedQADataset().get_dataset(
         n_sft_samples=N_SFT_SAMPLES, n_test_samples=N_TEST_SAMPLES
     )
 
@@ -63,8 +63,8 @@ def main() -> None:
         max_length=2048,
         num_train_epochs=N_SFT_TRAIN_EPOCHS,
         completion_only_loss=True,
-        per_device_train_batch_size=1,
-        gradient_accumulation_steps=4,
+        per_device_train_batch_size=8,
+        gradient_accumulation_steps=1,
         optim="adamw_torch_fused",
         logging_steps=10,
         save_strategy="epoch",
