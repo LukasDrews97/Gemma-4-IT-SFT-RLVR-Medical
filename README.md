@@ -1,9 +1,7 @@
 # Gemma-4-IT-SFT-RLVR-Medical
 
 [![Gemma-4-IT-SFT-RLVR-Medical](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
-
 [![Gemma-4-IT-SFT-RLVR-Medical-Q8_0](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q8__0-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
-
 [![Gemma-4-IT-SFT-RLVR-Medical-Q4_K_M](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q4__K__M-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
 
 Gemma-4-it finetuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and RLVR.
