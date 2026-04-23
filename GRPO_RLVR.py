@@ -12,7 +12,7 @@ from config import (
     TOKENIZER_ID,
 )
 from evaluate import get_decision
-from pubmedqa_dataset import get_dataset
+from hf_datasets.pubmedqa_dataset import get_dataset
 
 
 def main() -> None:

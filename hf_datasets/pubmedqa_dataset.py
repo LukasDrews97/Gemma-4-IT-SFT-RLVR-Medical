@@ -83,3 +83,15 @@ def get_dataset(
     )
 
     return sft_dataset, rlvr_dataset, test_dataset
+
+
+def get_decision(text: str) -> str:
+    """Simple parser to extract the 'yes/no/maybe' from the end of the response."""
+    text = text.lower().strip()
+    if "final decision: yes" in text:
+        return "yes"
+    if "final decision: no" in text:
+        return "no"
+    if "final decision: maybe" in text:
+        return "maybe"
+    return "unknown"

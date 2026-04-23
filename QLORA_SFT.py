@@ -10,9 +10,9 @@ from config import (
     N_TEST_SAMPLES,
     SFT_PATH,
     TOKENIZER_ID,
-    USE_QLORA
+    USE_QLORA,
 )
-from pubmedqa_dataset import get_dataset
+from hf_datasets.pubmedqa_dataset import get_dataset
 
 
 def main() -> None:
