@@ -1,10 +1,7 @@
 # Gemma-4-IT-SFT-RLVR-Medical
 
-[![Gemma-4-IT-SFT-RLVR-Medical](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
-[![Gemma-4-IT-SFT-RLVR-Medical-Q8_0](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q8__0-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
-[![Gemma-4-IT-SFT-RLVR-Medical-Q6_K](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q6__K-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
-[![Gemma-4-IT-SFT-RLVR-Medical-Q5_K_M](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q5__K__M-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
-[![Gemma-4-IT-SFT-RLVR-Medical-Q4_K_M](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q4__K__M-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
+[![Gemma-4-IT-SFT-RLVR-Medical](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical-ffc107?color=ffc107&logoColor=white)](https://huggingface.co/lukasdrews/Gemma-4-E2B-IT-SFT-RLVR-Medical)
+[![Gemma-4-IT-SFT-RLVR-Medical-GGUF](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--GGUF-ffc107?color=ffc107&logoColor=white)](https://huggingface.co/lukasdrews/Gemma-4-E2B-IT-SFT-RLVR-Medical-GGUF)
 
 Gemma-4-it fine-tuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and RLVR.
 
@@ -59,23 +56,23 @@ uv run evaluate.py
 ## Results
 
 ### Gemma-4-E2B-it 
-| **Model**                          | **Quantization** | **PubMedQA (Zero-Shot)** |
-|------------------------------------|------------------|-------------------------:|
-| Gemma-4-E2B-it (base model)        | -                | 58.10 %                  |
-| Gemma-4-E2B-it + SFT + RLVR        | -                | 73.10 %                  |
-| Gemma-4-E2B-it + SFT + RLVR        | Q8_0             | 72.40 %                  |
-| Gemma-4-E2B-it + SFT + RLVR        | Q6_K             | 72.10 %                  |
-| Gemma-4-E2B-it + SFT + RLVR        | Q5_K_M           | 72.00 %                  |
-| Gemma-4-E2B-it + SFT + RLVR        | Q4_K_M           | 71.80 %                  |
+| **Model**                    | **Quantization** | **PubMedQA (In-Domain)** | **MedQA-USMLE (Zero-Shot Transfer)** |
+|------------------------------|------------------|-------------------------:|-------------------------------------:|
+| Gemma-4-E2B-it (base model)  | -                | 58.10 %                  | 29.54%                               |
+| Gemma-4-E2B-it + SFT + RLVR  | -                | 73.10 %                  | TODO                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | Q8_0             | 72.40 %                  | TODO                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | Q6_K             | 72.10 %                  | TODO                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | Q5_K_M           | 72.00 %                  | TODO                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | Q4_K_M           | 71.80 %                  | TODO                                 |
 
 
 
-### Gemma-4-E4B-it 
-| **Model**                          | **Quantization** | **PubMedQA (Zero-Shot)** |
-|------------------------------------|------------------|-------------------------:|
-| Gemma-4-E4B-it (base model)        | -                | TODO                     |
-| Gemma-4-E4B-it + SFT + RLVR        | -                | TODO                     |
-| Gemma-4-E4B-it + SFT + RLVR        | Q8_0             | TODO                     |
-| Gemma-4-E4B-it + SFT + RLVR        | Q6_K             | TODO                     |
-| Gemma-4-E4B-it + SFT + RLVR        | Q5_K_M           | TODO                     |
-| Gemma-4-E4B-it + SFT + RLVR        | Q4_K_M           | TODO                     |
+### Gemma-4-E2B-it 
+| **Model**                    | **Quantization** | **PubMedQA (In-Domain)** | **MedQA-USMLE (Zero-Shot Transfer)** |
+|------------------------------|------------------|-------------------------:|-------------------------------------:|
+| Gemma-4-E4B-it (base model)  | -                | TODO                     | TODO                                 |
+| Gemma-4-E4B-it + SFT + RLVR  | -                | TODO                     | TODO                                 |
+| Gemma-4-E4B-it + SFT + RLVR  | Q8_0             | TODO                     | TODO                                 |
+| Gemma-4-E4B-it + SFT + RLVR  | Q6_K             | TODO                     | TODO                                 |
+| Gemma-4-E4B-it + SFT + RLVR  | Q5_K_M           | TODO                     | TODO                                 |
+| Gemma-4-E4B-it + SFT + RLVR  | Q4_K_M           | TODO                     | TODO                                 |
