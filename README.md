@@ -6,7 +6,7 @@
 [![Gemma-4-IT-SFT-RLVR-Medical-Q5_K_M](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q5__K__M-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
 [![Gemma-4-IT-SFT-RLVR-Medical-Q4_K_M](https://img.shields.io/badge/%F0%9F%A4%97%20_Model-Gemma--4--E2B--IT--SFT--RLVR--Medical--Q4__K__M-ffc107?color=ffc107&logoColor=white)](https://github.com/LukasDrews97/LLM_finetuning_in_practice)
 
-Gemma-4-it finetuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and RLVR.
+Gemma-4-it fine-tuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and RLVR.
 
 ### Sample Output with Reasoning (SFT + RLVR): <br>
 
@@ -40,8 +40,10 @@ Final Decision: yes
 </details>
 
 
-## One-command setup with uv
-
+## Setup
+### Inference
+TODO
+### Fine-tuning
 Requirements:
 - uv
 - CMake (for quantization)
@@ -56,27 +58,24 @@ uv run evaluate.py
 
 ## Results
 
-All models are evaluated on a holdout evaluation dataset of 1000 samples. Experiments ran on a RTX 5070 Ti.
-
-
 ### Gemma-4-E2B-it 
-| **Model**                          | **Quantization** | **PubMedQA** |
-|------------------------------------|------------------|:------------:|
-| Gemma-4-E2B-it (base model)        | -                | 58.10 %      |
-| Gemma-4-E2B-it + SFT + RLVR        | -                | 73.10 %      |
-| Gemma-4-E2B-it + SFT + RLVR        | Q8_0             | 72.40 %      |
-| Gemma-4-E2B-it + SFT + RLVR        | Q6_K             | 72.10 %      |
-| Gemma-4-E2B-it + SFT + RLVR        | Q5_K_M           | 72.00 %      |
-| Gemma-4-E2B-it + SFT + RLVR        | Q4_K_M           | 71.80 %      |
+| **Model**                          | **Quantization** | **PubMedQA (Zero-Shot)** |
+|------------------------------------|------------------|-------------------------:|
+| Gemma-4-E2B-it (base model)        | -                | 58.10 %                  |
+| Gemma-4-E2B-it + SFT + RLVR        | -                | 73.10 %                  |
+| Gemma-4-E2B-it + SFT + RLVR        | Q8_0             | 72.40 %                  |
+| Gemma-4-E2B-it + SFT + RLVR        | Q6_K             | 72.10 %                  |
+| Gemma-4-E2B-it + SFT + RLVR        | Q5_K_M           | 72.00 %                  |
+| Gemma-4-E2B-it + SFT + RLVR        | Q4_K_M           | 71.80 %                  |
 
 
 
 ### Gemma-4-E4B-it 
-| **Model**                          | **Quantization** | **PubMedQA** |
-|------------------------------------|------------------|:------------:|
-| Gemma-4-E4B-it (base model)        | -                | TODO         |
-| Gemma-4-E4B-it + SFT + RLVR        | -                | TODO         |
-| Gemma-4-E4B-it + SFT + RLVR        | Q8_0             | TODO         |
-| Gemma-4-E4B-it + SFT + RLVR        | Q6_K             | TODO         |
-| Gemma-4-E4B-it + SFT + RLVR        | Q5_K_M           | TODO         |
-| Gemma-4-E4B-it + SFT + RLVR        | Q4_K_M           | TODO         |
+| **Model**                          | **Quantization** | **PubMedQA (Zero-Shot)** |
+|------------------------------------|------------------|-------------------------:|
+| Gemma-4-E4B-it (base model)        | -                | TODO                     |
+| Gemma-4-E4B-it + SFT + RLVR        | -                | TODO                     |
+| Gemma-4-E4B-it + SFT + RLVR        | Q8_0             | TODO                     |
+| Gemma-4-E4B-it + SFT + RLVR        | Q6_K             | TODO                     |
+| Gemma-4-E4B-it + SFT + RLVR        | Q5_K_M           | TODO                     |
+| Gemma-4-E4B-it + SFT + RLVR        | Q4_K_M           | TODO                     |
