@@ -53,7 +53,7 @@ uv run evaluate.py
 ```
 
 
-## Results
+## Benchmarks
 
 ### Gemma-4-E2B-it 
 | **Model**                    | **Quantization** | **PubMedQA<br>(In-Domain)** | **MedQA-USMLE<br>(Zero-Shot Transfer)** |
