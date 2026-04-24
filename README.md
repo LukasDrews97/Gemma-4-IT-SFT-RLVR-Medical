@@ -67,7 +67,7 @@ uv run evaluate.py
 
 
 
-### Gemma-4-E2B-it 
+### Gemma-4-E4B-it 
 | **Model**                    | **Quantization** | **PubMedQA<br>(In-Domain)** | **MedQA-USMLE<br>(Zero-Shot Transfer)** |
 |------------------------------|------------------|----------------------------:|----------------------------------------:|
 | Gemma-4-E4B-it (base model)  | -                | TODO                        | TODO                                    |
