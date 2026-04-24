@@ -59,7 +59,7 @@ uv run evaluate.py
 | **Model**                    | **Quantization** | **PubMedQA (In-Domain)** | **MedQA-USMLE (Zero-Shot Transfer)** |
 |------------------------------|------------------|-------------------------:|-------------------------------------:|
 | Gemma-4-E2B-it (base model)  | -                | 58.10 %                  | 29.54%                               |
-| Gemma-4-E2B-it + SFT + RLVR  | -                | 73.10 %                  | TODO                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | -                | 73.10 %                  | 43.05%                               |
 | Gemma-4-E2B-it + SFT + RLVR  | Q8_0             | 72.40 %                  | TODO                                 |
 | Gemma-4-E2B-it + SFT + RLVR  | Q6_K             | 72.10 %                  | TODO                                 |
 | Gemma-4-E2B-it + SFT + RLVR  | Q5_K_M           | 72.00 %                  | TODO                                 |
