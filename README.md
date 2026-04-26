@@ -5,7 +5,7 @@
 
 Gemma-4-it fine-tuned on [PubMedQA](https://pubmedqa.github.io/), using SFT and RLVR.
 
-### Sample Output with Reasoning (SFT + RLVR): <br>
+### Sample Output with Reasoning: <br>
 
 <b>Question:</b> `Do GEC produce and bear factor H under complement attack?` <br>
 <b>Answer: </b>
@@ -102,7 +102,8 @@ Requirements:
 uv sync --no-dev &&
 uv run QLORA_SFT.py && 
 uv run GRPO_RLVR.py && 
-uv run evaluate.py
+uv run evaluate.py &&
+./quantize_models.sh
 ```
 
 
@@ -120,12 +121,9 @@ uv run evaluate.py
 
 
 
-### Gemma-4-E4B-it 
-| **Model**                    | **Quantization** | **PubMedQA<br>(In-Domain)** | **MedQA-USMLE<br>(Zero-Shot Transfer)** |
-|------------------------------|------------------|----------------------------:|----------------------------------------:|
-| Gemma-4-E4B-it (base model)  | -                | TODO                        | TODO                                    |
-| Gemma-4-E4B-it + SFT + RLVR  | -                | TODO                        | TODO                                    |
-| Gemma-4-E4B-it + SFT + RLVR  | Q8_0             | TODO                        | TODO                                    |
-| Gemma-4-E4B-it + SFT + RLVR  | Q6_K             | TODO                        | TODO                                    |
-| Gemma-4-E4B-it + SFT + RLVR  | Q5_K_M           | TODO                        | TODO                                    |
-| Gemma-4-E4B-it + SFT + RLVR  | Q4_K_M           | TODO                        | TODO                                    |
+## Roadmap
+- [x] SFT + RLVR for Gemma-4-E2B
+- [x] GGUF Quantization for E2B
+- [ ] Complete MedQA-USMLE Benchmarks for E2B (In Progress)
+- [ ] Release Gemma-4-E4B-it and benchmarks
+
