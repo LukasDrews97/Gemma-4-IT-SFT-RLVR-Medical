@@ -16,6 +16,8 @@ Final Decision: yes
 
 <details>
 <summary><b>View Internal Thinking Process and Detailed Reasoning</b></summary>
+
+```text
 1.  **Analyze the Request:** The user has provided a scientific context (a research abstract) and implicitly expects an answer (yes/no/maybe) based on the provided text.
 
 2.  **Analyze the Context (Abstract):**
@@ -32,8 +34,10 @@ Final Decision: yes
 
 5.  **Formulate the Reasoning:** Summarize the key experimental evidence that led to the conclusion. (GEC are a source of factor H.)
 
-6.  **Final Check:** Does the answer address the context accurately and directly? Yes. (The study confirms a new role for GEC in factor H production).Despite its importance in the regulation of complement activation, the main source of factor H in the kidney is still unclear. Our study demonstrates that GEC produce factor H and the synthesized factor H is presented on the surface of these cells. We therefore conclude that GEC may be a source of factor H that contributes to the kidney's ability to resist complement attack. <br>
+6.  **Final Check:** Does the answer address the context accurately and directly? Yes. (The study confirms a new role for GEC in factor H production).Despite its importance in the regulation of complement activation, the main source of factor H in the kidney is still unclear. Our study demonstrates that GEC produce factor H and the synthesized factor H is presented on the surface of these cells. We therefore conclude that GEC may be a source of factor H that contributes to the kidney's ability to resist complement attack. 
 Final Decision: yes
+```
+
 </details>
 
 
