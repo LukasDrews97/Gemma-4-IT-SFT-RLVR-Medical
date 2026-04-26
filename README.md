@@ -125,5 +125,5 @@ uv run evaluate.py &&
 - [x] SFT + RLVR for Gemma-4-E2B
 - [x] GGUF Quantization for E2B
 - [ ] Complete MedQA-USMLE Benchmarks for E2B (In Progress)
-- [ ] Release Gemma-4-E4B-it and benchmarks
+- [ ] Release E4B model and benchmarks
 
