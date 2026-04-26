@@ -39,7 +39,56 @@ Final Decision: yes
 
 ## Setup
 ### Inference
-TODO
+#### Full Precision
+```python
+#!pip install transformers, torch, accelerate
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+tokenizer = AutoTokenizer.from_pretrained("lukasdrews/Gemma-4-E2B-IT-SFT-RLVR-Medical")
+model = AutoModelForCausalLM.from_pretrained("lukasdrews/Gemma-4-E2B-IT-SFT-RLVR-Medical")
+messages = [
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Do GEC produce and bear factor H under complement attack?"}
+        ]
+    },
+]
+inputs = tokenizer.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    tokenize=True,
+    return_dict=True,
+    return_tensors="pt",
+).to(model.device)
+
+outputs = model.generate(**inputs, max_new_tokens=1024)
+print(tokenizer.decode(outputs[0][inputs["input_ids"].shape[-1]:]))
+```
+
+#### Quantized
+```python
+# !pip install llama-cpp-python
+from llama_cpp import Llama
+
+llm = Llama.from_pretrained(
+    repo_id="lukasdrews/Gemma-4-E2B-IT-SFT-RLVR-Medical-GGUF",
+    filename="gemma-4-E2B-it-sft-rlvr-medical-Q4_K_M.gguf",
+    verbose=False,
+)
+messages = [
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Do GEC produce and bear factor H under complement attack?"}
+        ]
+    },
+]
+
+outputs = llm.create_chat_completion(messages, max_tokens=1024)
+print(outputs["choices"][0]["message"]["content"])
+```
+
 ### Fine-tuning
 Requirements:
 - uv
