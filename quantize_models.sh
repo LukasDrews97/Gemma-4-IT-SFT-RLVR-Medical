@@ -25,10 +25,31 @@ MODELS=(
 )
 
 QUANTS=(
-    "Q8_0" 
-    "Q6_K" 
-    "Q5_K_M" 
+    # These methods require an importance matrix
+    #"IQ1_S"
+    #"IQ1_M"
+    #"IQ2_XXS"
+    #"IQ2_XS"
+    #"IQ2_S"
+    #"IQ2_M"
+    #"IQ3_XXS"
+    #"IQ3_XS"
+    #"Q2_K_S"
+    # 
+    "IQ3_S"
+    "IQ3_M"
+    "IQ4_XS"
+    "IQ4_NL"
+    "Q2_K"
+    "Q3_K_S"
+    "Q3_K_M"
+    "Q3_K_L"
+    "Q4_K_S"
     "Q4_K_M"
+    "Q5_K_S"
+    "Q5_K_M" 
+    "Q6_K"
+    "Q8_0"  
 )
 
 
@@ -56,7 +77,7 @@ for MODEL in "${MODELS[@]}"; do
             ./build/bin/llama-quantize "$F16_OUT" "$MODEL_GGUF_DIR/$MODEL-$Q.gguf" "$Q"
     done
 
-    rm "$F16_OUT"
+    #rm "$F16_OUT"
 
     echo "Done with $MODEL"
     echo ""
