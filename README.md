@@ -114,9 +114,9 @@ uv run evaluate.py &&
 |------------------------------|------------------|----------------------------:|----------------------------------------:|
 | Gemma-4-E2B-it (base model)  | -                | 58.10 %                     | 29.54 %                                 |
 | Gemma-4-E2B-it + SFT + RLVR  | -                | 73.10 %                     | 43.05 %                                 |
-| Gemma-4-E2B-it + SFT + RLVR  | Q8_0             | 72.40 %                     | TODO                                    |
-| Gemma-4-E2B-it + SFT + RLVR  | Q6_K             | 72.10 %                     | TODO                                    |
-| Gemma-4-E2B-it + SFT + RLVR  | Q5_K_M           | 72.00 %                     | TODO                                    |
+| Gemma-4-E2B-it + SFT + RLVR  | Q8_0             | 72.40 %                     | 43.00 %                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | Q6_K             | 72.10 %                     | 42.18 %                                 |
+| Gemma-4-E2B-it + SFT + RLVR  | Q5_K_M           | 72.00 %                     | 38.88 %                                 |
 | Gemma-4-E2B-it + SFT + RLVR  | Q4_K_M           | 71.80 %                     | 38.88 %                                 |
 
 
