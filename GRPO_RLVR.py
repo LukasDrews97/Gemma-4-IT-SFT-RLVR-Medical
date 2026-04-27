@@ -28,7 +28,6 @@ def main() -> None:
     base_model.config.bos_token_id = tokenizer.bos_token_id
     base_model.config.pad_token_id = tokenizer.pad_token_id
 
-    # 3. If there is a generation_config, update that too
     if hasattr(base_model, "generation_config"):
         base_model.generation_config.eos_token_id = tokenizer.eos_token_id
         base_model.generation_config.pad_token_id = tokenizer.pad_token_id
